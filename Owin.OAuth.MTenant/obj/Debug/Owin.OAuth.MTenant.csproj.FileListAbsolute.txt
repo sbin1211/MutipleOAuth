@@ -1,0 +1,14 @@
+D:\projects\MutipleOAuth\Owin.OAuth.MTenant\bin\Debug\Owin.OAuth.MTenant.dll
+D:\projects\MutipleOAuth\Owin.OAuth.MTenant\bin\Debug\Owin.OAuth.MTenant.pdb
+D:\projects\MutipleOAuth\Owin.OAuth.MTenant\bin\Debug\Microsoft.Owin.dll
+D:\projects\MutipleOAuth\Owin.OAuth.MTenant\bin\Debug\Microsoft.Owin.Security.dll
+D:\projects\MutipleOAuth\Owin.OAuth.MTenant\bin\Debug\Microsoft.Owin.Security.Google.dll
+D:\projects\MutipleOAuth\Owin.OAuth.MTenant\bin\Debug\Newtonsoft.Json.dll
+D:\projects\MutipleOAuth\Owin.OAuth.MTenant\bin\Debug\Owin.dll
+D:\projects\MutipleOAuth\Owin.OAuth.MTenant\bin\Debug\Microsoft.Owin.xml
+D:\projects\MutipleOAuth\Owin.OAuth.MTenant\bin\Debug\Microsoft.Owin.Security.xml
+D:\projects\MutipleOAuth\Owin.OAuth.MTenant\bin\Debug\Microsoft.Owin.Security.Google.xml
+D:\projects\MutipleOAuth\Owin.OAuth.MTenant\bin\Debug\Newtonsoft.Json.xml
+D:\projects\MutipleOAuth\Owin.OAuth.MTenant\obj\Debug\Owin.OAuth.MTenant.dll
+D:\projects\MutipleOAuth\Owin.OAuth.MTenant\obj\Debug\Owin.OAuth.MTenant.pdb
+D:\projects\MutipleOAuth\Owin.OAuth.MTenant\obj\Debug\Owin.OAuth.MTenant.csprojResolveAssemblyReference.cache
