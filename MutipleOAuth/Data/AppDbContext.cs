@@ -10,7 +10,7 @@ namespace MutipleOAuth.Data
     public class AppDbContext : DbContext
     {
         public AppDbContext() : base("defaultDB") { }
-        public IDbSet<OAuthApp> OAuthApps { get; set; }
+        public DbSet<OAuthApp> OAuthApps { get; set; }
 
         public override Task<int> SaveChangesAsync()
         {
@@ -24,6 +24,11 @@ namespace MutipleOAuth.Data
                 var message = ex.Message;
                 throw ex;
             }
+        }
+
+        public static AppDbContext Create()
+        {
+            return new AppDbContext();
         }
         public override int SaveChanges()
         {
@@ -54,8 +59,8 @@ namespace MutipleOAuth.Data
 
             var oauthAppTable = modelBuilder.Entity<OAuthApp>().ToTable("OAuthApp");
             oauthAppTable.Property(x => x.Provider).IsRequired();
-            oauthAppTable.Property(x => x.StoreKey).IsRequired();
-            oauthAppTable.Property(x => x.AppId).IsRequired();
+            oauthAppTable.Property(x => x.Tenant).IsRequired();
+            oauthAppTable.Property(x => x.ClientKey).IsRequired();
             oauthAppTable.Property(x => x.ClientSecrect).IsRequired();
 
             base.OnModelCreating(modelBuilder);

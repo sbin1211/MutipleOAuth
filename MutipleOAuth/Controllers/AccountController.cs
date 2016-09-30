@@ -280,7 +280,10 @@ namespace MutipleOAuth.Controllers
         public ActionResult ExternalLogin(string provider, string tenant, string returnUrl)
         {
             // Request a redirect to the external login provider
-            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
+            var result= new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
+            result.TenantKey = tenant;
+
+            return result;
         }
 
      

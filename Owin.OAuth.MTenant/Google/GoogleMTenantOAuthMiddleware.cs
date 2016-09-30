@@ -20,7 +20,6 @@ namespace Owin.OAuth.MTenant.Google
     {
         private readonly ILogger _logger;
         private readonly HttpClient _httpClient;
-
         private readonly IMTenantOAuthKeySecrectProvider _keySecrectProvider;
 
         public GoogleMTenantOAuthMiddleware(
@@ -30,6 +29,12 @@ namespace Owin.OAuth.MTenant.Google
             base(next, app, ByPassOptionsException(options))
 
         {
+            _logger = app.CreateLogger<GoogleMTenantOAuthMiddleware>();
+
+            _httpClient = new HttpClient(ResolveHttpMessageHandler(Options));
+            _httpClient.Timeout = Options.BackchannelTimeout;
+            _httpClient.MaxResponseContentBufferSize = 1024 * 1024 * 10; 
+
             _keySecrectProvider = keySecrectProvider;
         }
         protected override AuthenticationHandler<GoogleOAuth2AuthenticationOptions> CreateHandler()
@@ -47,6 +52,23 @@ namespace Owin.OAuth.MTenant.Google
                 options.ClientSecret = "0";
 
             return options;
+        }
+        private static HttpMessageHandler ResolveHttpMessageHandler(GoogleOAuth2AuthenticationOptions options)
+        {
+            HttpMessageHandler handler = options.BackchannelHttpHandler ?? new WebRequestHandler();
+
+            if (options.BackchannelCertificateValidator != null)
+            {
+                // Set the cert validate callback
+                var webRequestHandler = handler as WebRequestHandler;
+                if (webRequestHandler == null)
+                {
+                    throw new InvalidOperationException("An ICertificateValidator cannot be specified at the same time as an HttpMessageHandler unless it is a WebRequestHandler.");
+                }
+                webRequestHandler.ServerCertificateValidationCallback = options.BackchannelCertificateValidator.Validate;
+            }
+
+            return handler;
         }
     }
 }

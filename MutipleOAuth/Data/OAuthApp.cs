@@ -7,9 +7,9 @@ namespace MutipleOAuth.Data
 {
     public class OAuthApp :BaseEntity
     {
-        public string AppId { get; set; }
+        public string ClientKey { get; set; }
         public string ClientSecrect { get; set; }
-        public string StoreKey { get; set; }
+        public string Tenant { get; set; }
         public string Provider { get; set; }
     }
 }

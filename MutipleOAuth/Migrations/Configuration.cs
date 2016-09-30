@@ -23,11 +23,33 @@ namespace MutipleOAuth.Migrations
         protected override void Seed(AppDbContext context)
         {
             var apps = Builder<OAuthApp>.CreateListOfSize(100).All()
-                    .With(c => c.AppId = Guid.NewGuid().ToString())
-                    .With(c => c.StoreKey = Guid.NewGuid().ToString())
+                    .With(c => c.ClientKey = Guid.NewGuid().ToString())
+                    .With(c => c.Tenant = Guid.NewGuid().ToString())
                     .With(c => c.ClientSecrect = Guid.NewGuid().ToString())
                     .With(c => c.Provider = RandomPorvider())
                     .Build();
+
+            var predefineApp = new OAuthApp()
+            {
+                ClientKey = "261641239844-qhs4ljqv8mo8mbc0ni7fmbb23se9ksnu.apps.googleusercontent.com",
+                ClientSecrect = "u6Y0eNGu-v3gK7L-IiaNsMoS",
+                Provider = "Google",
+                Tenant = "webstore",
+
+            };
+            apps.Add(predefineApp);
+
+            predefineApp = new OAuthApp()
+            {
+                ClientKey = "740516412651-pni9sk3hmcu3ongf94mom952ple4tumt.apps.googleusercontent.com",
+                ClientSecrect = "8cMwmwF0YXt7EGUKog9vIj3G",
+                Provider = "Google",
+                Tenant = "Webclient",
+
+            };
+            apps.Add(predefineApp);
+
+
             context.OAuthApps.AddIfNoExist(c => c.Id, apps.ToArray());
 
         }

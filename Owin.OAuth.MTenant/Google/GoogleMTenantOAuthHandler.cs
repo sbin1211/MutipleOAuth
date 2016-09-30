@@ -79,8 +79,32 @@ namespace Owin.OAuth.MTenant.Google
                 body.Add(new KeyValuePair<string, string>("grant_type", "authorization_code"));
                 body.Add(new KeyValuePair<string, string>("code", code));
                 body.Add(new KeyValuePair<string, string>("redirect_uri", redirectUri));
-                body.Add(new KeyValuePair<string, string>("client_id", Options.ClientId));
-                body.Add(new KeyValuePair<string, string>("client_secret", Options.ClientSecret));
+
+                //give a change to the key/secrect provider to 
+
+                if (_keySecrectProvider.Enabled)
+                {
+                    var tenantVal = _keySecrectProvider.GetTeant(properties);
+
+                    var provider = _keySecrectProvider.GetProvider(properties);
+
+                    var keySecrect = await _keySecrectProvider.GetOAuthClientKeySecrect(tenantVal, provider);
+                    if (keySecrect != null)
+                    {
+                        body.Add(new KeyValuePair<string, string>("client_id", keySecrect.Item1));
+                        body.Add(new KeyValuePair<string, string>("client_secret", keySecrect.Item2));
+                    }
+                    else
+                    {
+                        body.Add(new KeyValuePair<string, string>("client_id", Options.ClientId));
+                        body.Add(new KeyValuePair<string, string>("client_secret", Options.ClientSecret));
+                    }
+                }
+                else
+                {
+                    body.Add(new KeyValuePair<string, string>("client_id", Options.ClientId));
+                    body.Add(new KeyValuePair<string, string>("client_secret", Options.ClientSecret));
+                }
 
                 // Request the token
                 HttpResponseMessage tokenResponse =
@@ -106,7 +130,7 @@ namespace Owin.OAuth.MTenant.Google
                 text = await graphResponse.Content.ReadAsStringAsync();
                 JObject user = JObject.Parse(text);
 
-                var context = new GoogleMTenantOAuthAuthenticatedContext(Context, user, response);
+                var context = new GoogleOAuth2AuthenticatedContext(Context, user, response);
                 context.Identity = new ClaimsIdentity(
                     Options.AuthenticationType,
                     ClaimsIdentity.DefaultNameClaimType,
@@ -155,11 +179,12 @@ namespace Owin.OAuth.MTenant.Google
             }
         }
 
-        protected override Task ApplyResponseChallengeAsync()
+        protected override async Task ApplyResponseChallengeAsync()
         {
             if (Response.StatusCode != 401)
             {
-                return Task.FromResult<object>(null);
+                return;
+
             }
 
             AuthenticationResponseChallenge challenge = Helper.LookupChallenge(Options.AuthenticationType, Options.AuthenticationMode);
@@ -193,8 +218,28 @@ namespace Owin.OAuth.MTenant.Google
                 var queryStrings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                 queryStrings.Add("response_type", "code");
 
-                
-                queryStrings.Add("client_id", Options.ClientId);
+                //give a change to get the client id from the provider
+                if (_keySecrectProvider.Enabled)
+                {
+
+                    var tenant = _keySecrectProvider.GetTeant(properties);
+
+                    var provider = _keySecrectProvider.GetProvider(properties);
+
+                    var keySecrect = await _keySecrectProvider.GetOAuthClientKeySecrect(tenant, provider);
+
+                    if (keySecrect != null)
+                    {
+                        queryStrings.Add("client_id", keySecrect.Item1);
+                    }
+                    else
+                    {
+                        queryStrings.Add("client_id", Options.ClientId);
+                    }
+                }
+                else
+                    queryStrings.Add("client_id", Options.ClientId);
+
                 queryStrings.Add("redirect_uri", redirectUri);
 
                 // space separated
@@ -217,13 +262,13 @@ namespace Owin.OAuth.MTenant.Google
                 string authorizationEndpoint = WebUtilities.AddQueryString(AuthorizeEndpoint,
                     queryStrings);
 
-                var redirectContext = new GoogleMTenantOAuthApplyRedirectContent(
+                var redirectContext = new GoogleOAuth2ApplyRedirectContext(
                     Context, Options,
                     properties, authorizationEndpoint);
                 Options.Provider.ApplyRedirect(redirectContext);
             }
 
-            return Task.FromResult<object>(null);
+            return;
         }
 
         public override async Task<bool> InvokeAsync()
@@ -245,7 +290,7 @@ namespace Owin.OAuth.MTenant.Google
                     return true;
                 }
 
-                var context = new GoogleMTenantOAuthReturnEndpointContext(Context, ticket);
+                var context = new GoogleOAuth2ReturnEndpointContext(Context, ticket);
                 context.SignInAsAuthenticationType = Options.SignInAsAuthenticationType;
                 context.RedirectUri = ticket.Properties.RedirectUri;
 

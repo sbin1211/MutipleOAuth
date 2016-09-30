@@ -6,13 +6,15 @@
 using System;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Google;
+using Owin.OAuth.MTenant.Infrastructure;
 
 namespace Owin.OAuth.MTenant.Google
 {
     public static class GoogleMTenantAuthenticationExtensions
     {
 
-        public static IAppBuilder UseGoogleMTenantAuthentication(this IAppBuilder app, GoogleOAuth2AuthenticationOptions options)
+        public static IAppBuilder UseGoogleMTenantAuthentication(this IAppBuilder app, GoogleOAuth2AuthenticationOptions options,
+            IMTenantOAuthKeySecrectProvider keySecrectProvider)
         {
             if (app == null)
             {
@@ -23,7 +25,7 @@ namespace Owin.OAuth.MTenant.Google
                 throw new ArgumentNullException("options");
             }
 
-            app.Use(typeof(GoogleMTenantOAuthMiddleware), app, options);
+            app.Use(typeof(GoogleMTenantOAuthMiddleware), app, options,keySecrectProvider);
             return app;
         }
     }

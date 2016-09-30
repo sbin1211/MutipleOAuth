@@ -1,4 +1,3 @@
-D:\projects\MutipleOAuth\MutipleOAuth\bin\ApplicationInsights.config
 D:\projects\MutipleOAuth\MutipleOAuth\bin\roslyn\csc.exe
 D:\projects\MutipleOAuth\MutipleOAuth\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
 D:\projects\MutipleOAuth\MutipleOAuth\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
@@ -85,3 +84,7 @@ D:\projects\MutipleOAuth\MutipleOAuth\bin\FizzWare.NBuilder.dll
 D:\projects\MutipleOAuth\MutipleOAuth\bin\de-DE\Faker.NET4.resources.dll
 D:\projects\MutipleOAuth\MutipleOAuth\obj\Debug\MutipleOAuth.Migrations.first.resources
 D:\projects\MutipleOAuth\MutipleOAuth\obj\Debug\MutipleOAuth.csproj.GenerateResource.Cache
+D:\projects\MutipleOAuth\MutipleOAuth\bin\Owin.OAuth.MTenant.dll
+D:\projects\MutipleOAuth\MutipleOAuth\bin\Owin.OAuth.MTenant.pdb
+D:\projects\MutipleOAuth\MutipleOAuth\obj\Debug\MutipleOAuth.Migrations.second.resources
+D:\projects\MutipleOAuth\MutipleOAuth\obj\Debug\MutipleOAuth.Migrations.third.resources

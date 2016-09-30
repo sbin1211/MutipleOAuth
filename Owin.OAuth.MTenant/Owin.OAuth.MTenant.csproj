@@ -61,21 +61,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Google\Constants.cs" />
     <Compile Include="Google\GoogleMTenantAuthenticationExtensions.cs" />
     <Compile Include="Google\GoogleMTenantOAuthHandler.cs" />
     <Compile Include="Google\GoogleMTenantOAuthMiddleware.cs" />
-    <Compile Include="Google\GoogleMTenantOAuthOptions.cs" />
-    <Compile Include="Google\Provider\GoogleMTenantOAuthApplyRedirectContent.cs" />
-    <Compile Include="Google\Provider\GoogleMTenantOAuthAuthenticatedContext.cs" />
-    <Compile Include="Google\Provider\GoogleMTenantOAuthProvider.cs" />
-    <Compile Include="Google\Provider\GoogleMTenantOAuthReturnEndpointContext.cs" />
-    <Compile Include="Google\Provider\IGoogleMTenantOAuthProvider.cs" />
     <Compile Include="Infrastructure\MTenantOAuthKeySecrectProvider.cs" />
     <Compile Include="Infrastructure\IMTenantOAuthKeySecrectProvider.cs" />
     <Compile Include="Infrastructure\MTenantConstants.cs" />
-    <Compile Include="Infrastructure\MTenantOAuthOptions.cs" />
-    <Compile Include="Infrastructure\IMTenantOAuthOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

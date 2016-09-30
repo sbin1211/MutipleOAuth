@@ -7,6 +7,12 @@ using Microsoft.Owin.Security.Google;
 using Owin;
 using MutipleOAuth.Models;
 using Owin.OAuth.MTenant.Google;
+using Owin.OAuth.MTenant.Infrastructure;
+using System.Threading.Tasks;
+using MutipleOAuth.Data;
+using System.Web;
+using System.Linq;
+using System.Data.Entity;
 
 namespace MutipleOAuth
 {
@@ -17,6 +23,9 @@ namespace MutipleOAuth
         {
             // Configure the db context, user manager and signin manager to use a single instance per request
             app.CreatePerOwinContext(ApplicationDbContext.Create);
+
+            app.CreatePerOwinContext(AppDbContext.Create);
+
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
 
@@ -53,9 +62,23 @@ namespace MutipleOAuth
             //   appId: "",
             //   appSecret: "");
 
-            app.UseGoogleMTenantAuthentication(new GoogleOAuth2AuthenticationOptions()
-            {
-            });
+            var options = new GoogleOAuth2AuthenticationOptions();
+            var keySecrectProvider = new MTenantOAuthKeySecrectProvider();
+            keySecrectProvider.OnGetOauthClientKeySecrect = GetOAuthKeySecrect;
+            app.UseGoogleMTenantAuthentication(options, keySecrectProvider);
+        }
+
+        private async Task<Tuple<string, string>> GetOAuthKeySecrect(string tenant, string provider)
+        {
+
+            var db = HttpContext.Current.GetOwinContext().Get<AppDbContext>();
+            var item = await (from p in db.OAuthApps
+                              where p.Tenant.ToLower() == tenant.ToLower() && p.Provider.ToLower() == provider.ToLower()
+                              select p).FirstOrDefaultAsync();
+
+            if (item == null) return null;
+
+            return new Tuple<string, string>(item.ClientKey, item.ClientSecrect);
         }
     }
 }
